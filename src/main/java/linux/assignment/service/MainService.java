@@ -1,5 +1,7 @@
 package linux.assignment.service;
 
-public interface MainService {
+import linux.assignment.dto.InfoListResponseDto;
 
+public interface MainService {
+    InfoListResponseDto getInfoList();
 }

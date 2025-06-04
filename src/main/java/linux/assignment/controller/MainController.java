@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -24,7 +25,13 @@ public class MainController {
         res.add(InfoResponseDto.set(37.40143885692029, 126.92283848282376, 17.811, "2025-06.03", 12000, 12, "2002", "중개거래"));
         res.add(InfoResponseDto.set(37.40344412936734, 126.93093453474235, 17.811, "2025-06.03", 12000, 12, "2002", "중개거래"));
         InfoListResponseDto set = InfoListResponseDto.set(res);
-        return ResponseEntity.ok(set);
+
+        InfoListResponseDto infoList = mainService.getInfoList();
+        return ResponseEntity.ok(infoList);
     }
+
+    @GetMapping("update") // curl http://linux-java:8080/api/update
+    public void dd(){}
+
 
 }
