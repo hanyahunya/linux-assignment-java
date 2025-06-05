@@ -1,5 +1,6 @@
 package linux.assignment.dto;
 
+import linux.assignment.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,4 +15,17 @@ public class InfoResponseDto {
     private int floor; // 층
     private String buildYear; // 건축년도
     private String dealingGbn; // 거래유형
+
+    public static InfoResponseDto entityToDto(Item item) {
+        return InfoResponseDto.set(
+                item.getLatitude(),
+                item.getLongitude(),
+                item.getExcluUseAr(),
+                item.getDealDay(),
+                item.getDealAmount(),
+                item.getFloor(),
+                item.getBuildYear(),
+                item.getDealingGbn()
+        );
+    }
 }

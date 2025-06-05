@@ -26,13 +26,15 @@ public class MainServiceImpl implements MainService {
     public InfoListResponseDto getInfoList() {
         File folder = new File("/app/xml");
         File[] xmlFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".xml"));
+        List<InfoResponseDto> dtoList = new ArrayList<>();
 
         if (xmlFiles == null || xmlFiles.length == 0) {
-            System.out.println("XML 파일이 없습니다.");
-            return null;
+            mainRepository.findAllItems().forEach(item -> {
+                dtoList.add(InfoResponseDto.entityToDto(item));
+            });
+            return InfoListResponseDto.set(dtoList);
         }
 
-        List<InfoResponseDto> dtoList = new ArrayList<>();
         for (File xmlFile : xmlFiles) {
             List<Item> items = parseXml(xmlFile);
             for (Item item : items) {
@@ -45,6 +47,7 @@ public class MainServiceImpl implements MainService {
                     item.setLatitude(geocoded.get("latitude"));
                     item.setLongitude(geocoded.get("longitude"));
                 }
+                // 저장전에 distinct
                 mainRepository.save(item);
 
                 dtoList.add(InfoResponseDto.set(
@@ -58,6 +61,7 @@ public class MainServiceImpl implements MainService {
                         item.getDealingGbn()
                 ));
             }
+            xmlFile.delete();
         }
         return InfoListResponseDto.set(dtoList);
     }
