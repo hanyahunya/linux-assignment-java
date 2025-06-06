@@ -22,8 +22,8 @@ public class MainController {
         return ResponseEntity.ok(infoList);
     }
 
-    @GetMapping("update") // curl http://linux-java:8080/api/update
-    public void dd(){}
-
-
+    @GetMapping("update")
+    public void updateInfo(){
+        mainService.updateInfo();
+    }
 }

@@ -24,17 +24,21 @@ public class MainServiceImpl implements MainService {
 
     @Override
     public InfoListResponseDto getInfoList() {
+
+        List<InfoResponseDto> dtoList = new ArrayList<>();
+        mainRepository.findAllItems().forEach(item -> {
+            dtoList.add(InfoResponseDto.entityToDto(item));
+        });
+        return InfoListResponseDto.set(dtoList);
+    }
+
+    @Override
+    public void updateInfo() {
         File folder = new File("/app/xml");
         File[] xmlFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".xml"));
-        List<InfoResponseDto> dtoList = new ArrayList<>();
-
-        if (xmlFiles == null || xmlFiles.length == 0) {
-            mainRepository.findAllItems().forEach(item -> {
-                dtoList.add(InfoResponseDto.entityToDto(item));
-            });
-            return InfoListResponseDto.set(dtoList);
+        if (xmlFiles == null) {
+            return;
         }
-
         for (File xmlFile : xmlFiles) {
             List<Item> items = parseXml(xmlFile);
             for (Item item : items) {
@@ -49,21 +53,9 @@ public class MainServiceImpl implements MainService {
                 }
                 // 저장전에 distinct
                 mainRepository.save(item);
-
-                dtoList.add(InfoResponseDto.set(
-                        item.getLatitude(),
-                        item.getLongitude(),
-                        item.getExcluUseAr(),
-                        item.getDealDay(),
-                        item.getDealAmount(),
-                        item.getFloor(),
-                        item.getBuildYear(),
-                        item.getDealingGbn()
-                ));
             }
             xmlFile.delete();
         }
-        return InfoListResponseDto.set(dtoList);
     }
 
     private List<Item> parseXml(File file) {
