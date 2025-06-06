@@ -23,7 +23,8 @@ public class MainController {
     }
 
     @GetMapping("update")
-    public void updateInfo(){
+    public ResponseEntity<Void> updateInfo(){
         mainService.updateInfo();
+        return ResponseEntity.ok().build();
     }
 }
